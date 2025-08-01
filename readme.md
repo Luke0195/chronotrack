@@ -82,7 +82,7 @@ Escolhi esse projeto com base em um caso real em que atuei profissionalmente, ma
 
 ### 📌 Diagrama de Caso de Uso
 
-![Diagrama de Caso de Uso](./usecase_diagram.png)
+![Diagrama de Caso de Uso](./requirements/usecase_diagram.png)
 
 O diagrama de caso de uso apresenta os dois atores principais:
 - **Colaborador**, que realiza marcações de ponto.
@@ -92,7 +92,7 @@ O diagrama de caso de uso apresenta os dois atores principais:
 
 ### 📌 Diagrama de Classes
 
-![Diagrama de Classes](./class_diagram.png)
+![Diagrama de Classes](./requirements/class_diagram.png)
 
 O diagrama de classes define a estrutura de entidades do sistema, destacando:
 - Usuários, perfis e permissões (User, Role, UserRole).
