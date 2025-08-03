@@ -30,9 +30,8 @@ class UserControllerTest {
   @Test
   void shouldReturnsBadRequestIfNoNameIsProvided() throws Exception{
     UserRequestDto dto = new UserRequestDto( null,"any_mail@mail.com", "any_password");
-    String jsonBody = objectMapper.writeValueAsString(dto);
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
-      .content(jsonBody)
+      .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
       .accept(MediaType.APPLICATION_JSON));
     resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -42,13 +41,28 @@ class UserControllerTest {
   @Test
   void shouldReturnsBadRequestIfNoEmailIsProvided() throws Exception{
     UserRequestDto dto = new UserRequestDto("any_name", null, "any_password");
-    String jsonBody = objectMapper.writeValueAsString(dto);
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
-      .content(jsonBody)
+      .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
       .accept(MediaType.APPLICATION_JSON)
     );
     resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @DisplayName("should returns 400 if an invalid email is provided")
+  @Test
+  void shouldReturnsBadRequestIfAnInvalidEmailIsProvided() throws Exception{
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail", "any_password");
+    ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
+      .content(parseObjectToString(dto))
+      .contentType(MediaType.APPLICATION_JSON)
+      .accept(MediaType.APPLICATION_JSON)
+    );
+    resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  private String parseObjectToString(Object object) throws Exception{
+    return objectMapper.writeValueAsString(object);
   }
 
 
