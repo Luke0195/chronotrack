@@ -1,6 +1,9 @@
 package br.com.chronotrack.app.controller;
 
 
+import br.com.chronotrack.app.domain.dto.request.UserRequestDto;
+import br.com.chronotrack.app.domain.entities.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +25,19 @@ class UserControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
 
-
-  @DisplayName("should returns 404 if no url was found")
+  @DisplayName("Should returns 400 if no name is provided")
   @Test
-  void shouldReturnsNotFoundWhenMethodWasNotFound() throws Exception{
+  void shouldReturnsBadRequestIfNoNameIsProvided() throws Exception{
+    UserRequestDto dto = new UserRequestDto( null,"any_mail@mail.com", "any_password");
+    String jsonBody = objectMapper.writeValueAsString(dto);
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
+      .content(jsonBody)
       .contentType(MediaType.APPLICATION_JSON)
       .accept(MediaType.APPLICATION_JSON));
-    resultActions.andExpect(MockMvcResultMatchers.status().isNotFound());
+    resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
 
