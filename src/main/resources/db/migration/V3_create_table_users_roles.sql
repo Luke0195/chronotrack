@@ -1,0 +1,7 @@
+CREATE TABLE tb_users_roles(
+   id BIGINT NOT NULL PRIMARY KEY ,
+   role_id BIGINT,
+   user_id BIGINT,
+   FOREIGN KEY(role_id) REFERENCES  tb_roles(id) ON UPDATE CASCADE ON DELETE SET NULL,
+   FOREIGN KEY (user_id) REFERENCES tb_users(id) ON UPDATE CASCADE ON DELETE SET NULL;
+);
