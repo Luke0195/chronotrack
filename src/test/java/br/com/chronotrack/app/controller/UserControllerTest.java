@@ -74,6 +74,18 @@ class UserControllerTest {
     resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
+  @DisplayName("should returns 400 if an invalid password is provided")
+  @Test
+  void shouldReturnsBadRequestIfAnInvalidPasswordIsProvided() throws Exception{
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_p");
+    ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
+      .content(parseObjectToString(dto))
+      .contentType(MediaType.APPLICATION_JSON)
+      .accept(MediaType.APPLICATION_JSON)
+    );
+    resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
   private String parseObjectToString(Object object) throws Exception{
     return objectMapper.writeValueAsString(object);
   }
