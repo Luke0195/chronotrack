@@ -12,7 +12,12 @@ public record UserRequestDto(
   String email,
   @NotEmpty(message = "The field password must be required")
   @Min(value = 8, message = "The field password must have least 8 characters")
-  String password
-
+  String password,
+  @NotEmpty(message = "The field password_confirmation must be required")
+  String passwordConfirmation
 ) {
+
+  public boolean validatePassword(){
+    return this.password.equalsIgnoreCase(this.passwordConfirmation);
+  }
 }
