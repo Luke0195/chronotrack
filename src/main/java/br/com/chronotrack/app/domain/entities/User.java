@@ -44,4 +44,8 @@ public class User implements Serializable {
     void preUpdate(){
       this.updatedAt = LocalDateTime.now();
     }
+
+    private boolean isValidPassword(String passwordConfirmation){
+      return password.equalsIgnoreCase(passwordConfirmation);
+    }
 }
