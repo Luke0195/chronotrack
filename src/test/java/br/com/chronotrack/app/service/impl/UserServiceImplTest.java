@@ -1,8 +1,10 @@
 package br.com.chronotrack.app.service.impl;
 
 import br.com.chronotrack.app.domain.dto.request.UserRequestDto;
-import br.com.chronotrack.app.domain.entities.User;
+import br.com.chronotrack.app.factories.UserFactory;
 import br.com.chronotrack.app.repository.UserRepository;
+import br.com.chronotrack.app.service.exceptions.PasswordsDoNotMatchException;
+import br.com.chronotrack.app.service.exceptions.ResourceAlreadyExistsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +26,23 @@ class UserServiceImplTest {
 
   @DisplayName("Add should returns UnprocessedEntity if an email already exists")
   @Test
-  void addShouldReturnsUnprocessedEntityIfEmailAlreadyExists(){
-    Mockito.when(userRepository.findByEmail(Mockito.any())).thenThrow(RuntimeException.class);
-    final UserRequestDto userRequestDto = new UserRequestDto("any_name", "any_mail@mail.com", "any_password", "any_password");
-    Assertions.assertThrows(RuntimeException.class, () -> {
+  void addShouldReturnsResourceAlreadyExistsWhenAnValidEmailAlreadyExists(){
+    Mockito.when(userRepository.findByEmail(Mockito.any())).thenThrow(ResourceAlreadyExistsException.class);
+    final UserRequestDto userRequestDto = UserFactory.makeUserRequestDto();
+    Assertions.assertThrows(ResourceAlreadyExistsException.class, () -> {
         userService.add(userRequestDto);
     });
+  }
+
+  @DisplayName("Add should throws PasswordDoesNotMatchException if password does not match with password confirmation")
+  @Test
+  void addShouldReturnsPasswordDoesNotMatchExceptionWhenPasswordDoesNotMatchWithPasswordConfirmation(){
+    final UserRequestDto userRequestDto  = new UserRequestDto("any_name", "any_mail@mail.com",
+      "any_password", "12345");
+    Assertions.assertThrows(PasswordsDoNotMatchException.class, () -> {
+        userService.add(userRequestDto);
+    });
+
   }
 
 }
