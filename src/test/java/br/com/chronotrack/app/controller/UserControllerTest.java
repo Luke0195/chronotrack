@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.HashSet;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
@@ -30,7 +32,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if no name is provided")
   @Test
   void shouldReturnsBadRequestIfNoNameIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto( null,"any_mail@mail.com", "any_password", "any_password");
+    UserRequestDto dto = new UserRequestDto( null,"any_mail@mail.com", "any_password", "any_password", new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
       .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
@@ -41,7 +43,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if no email is provided")
   @Test
   void shouldReturnsBadRequestIfNoEmailIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto("any_name", null, "any_password", "any_password");
+    UserRequestDto dto = new UserRequestDto("any_name", null, "any_password", "any_password",new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
       .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +55,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if an invalid email is provided")
   @Test
   void shouldReturnsBadRequestIfAnInvalidEmailIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto("any_name", "any_mail", "any_password", "any_password");
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail", "any_password", "any_password", new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
       .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +67,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if no password is provided")
   @Test
   void shouldReturnsBadRequestIfNoPasswordIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", null, "any_password");
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", null, "any_password", new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
       .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +79,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if an invalid password is provided")
   @Test
   void shouldReturnsBadRequestIfAnInvalidPasswordIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_p", "any_password");
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_p", "any_password",new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/signup")
       .content(parseObjectToString(dto))
       .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +91,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if no passwordConfirmation is provided")
   @Test
   void shouldReturnsBadRequestIfNoPasswordConfirmationIsProvided() throws Exception{
-    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_password", null);
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_password", null, new HashSet<>());
     ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
       .post("/signup")
       .content(parseObjectToString(dto))
@@ -102,7 +104,7 @@ class UserControllerTest {
   @DisplayName("should returns 400 if an invalid passwordConfirmation is provided")
   @Test
   void shouldReturnsBadRequestIfAnInvalidPasswordConfirmationIsProvided(){
-    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_password", "any_passwo");
+    UserRequestDto dto = new UserRequestDto("any_name", "any_mail@mail.com", "any_password", "any_passwo", new HashSet<>());
     boolean result = dto.validatePassword();
     Assertions.assertFalse(result);
   }

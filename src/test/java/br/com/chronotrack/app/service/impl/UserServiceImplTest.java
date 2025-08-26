@@ -1,6 +1,8 @@
 package br.com.chronotrack.app.service.impl;
 
+import br.com.chronotrack.app.domain.dto.request.RoleRequestDto;
 import br.com.chronotrack.app.domain.dto.request.UserRequestDto;
+import br.com.chronotrack.app.factories.RoleFactory;
 import br.com.chronotrack.app.factories.UserFactory;
 import br.com.chronotrack.app.repository.UserRepository;
 import br.com.chronotrack.app.service.exceptions.PasswordsDoNotMatchException;
@@ -13,6 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -38,11 +43,18 @@ class UserServiceImplTest {
   @Test
   void addShouldReturnsPasswordDoesNotMatchExceptionWhenPasswordDoesNotMatchWithPasswordConfirmation(){
     final UserRequestDto userRequestDto  = new UserRequestDto("any_name", "any_mail@mail.com",
-      "any_password", "12345");
+      "any_password", "12345", new HashSet<>());
     Assertions.assertThrows(PasswordsDoNotMatchException.class, () -> {
         userService.add(userRequestDto);
     });
+  }
 
+  @DisplayName("Add shoudl throws ResourceNotFoundException when an invalid role is provided")
+  @Test
+  void addShouldReturnsResourceNotFoundExceptionWhenAnInvalidRoleIsProvided(){
+    Set<RoleRequestDto> roles = new HashSet<>();
+    roles.add(RoleFactory.makeRoleRequestDto());
+    final UserRequestDto user = UserFactory.makeUserRequestDto();
   }
 
 }
