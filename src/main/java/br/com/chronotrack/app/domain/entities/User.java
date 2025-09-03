@@ -1,6 +1,5 @@
 package br.com.chronotrack.app.domain.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 

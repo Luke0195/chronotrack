@@ -4,6 +4,7 @@ import br.com.chronotrack.app.domain.dto.request.RoleRequestDto;
 import br.com.chronotrack.app.domain.dto.request.UserRequestDto;
 import br.com.chronotrack.app.factories.RoleFactory;
 import br.com.chronotrack.app.factories.UserFactory;
+import br.com.chronotrack.app.repository.RoleRepository;
 import br.com.chronotrack.app.repository.UserRepository;
 import br.com.chronotrack.app.service.exceptions.PasswordsDoNotMatchException;
 import br.com.chronotrack.app.service.exceptions.ResourceAlreadyExistsException;
@@ -24,7 +25,8 @@ class UserServiceImplTest {
 
   @Mock
   private UserRepository userRepository;
-
+  @Mock
+  private RoleRepository roleRepository;
   private UserRequestDto userRequestDto;
   @InjectMocks
   private UserServiceImpl userService;
@@ -49,12 +51,14 @@ class UserServiceImplTest {
     });
   }
 
-  @DisplayName("Add shoudl throws ResourceNotFoundException when an invalid role is provided")
+  @DisplayName("Add should throws ResourceNotFoundException when an invalid role is provided")
   @Test
-  void addShouldReturnsResourceNotFoundExceptionWhenAnInvalidRoleIsProvided(){
-    Set<RoleRequestDto> roles = new HashSet<>();
-    roles.add(RoleFactory.makeRoleRequestDto());
-    final UserRequestDto user = UserFactory.makeUserRequestDto();
+  void addShouldReturnsResourceNotFoundExceptionWhenAnInvalidRoleIsProvided(){;
+    final UserRequestDto userRequestDto = UserFactory.makeUserRequestDto();
+    Mockito.when(roleRepository.findByName(Mockito.any())).thenThrow(ResourceAlreadyExistsException.class);
+    Assertions.assertThrows(ResourceAlreadyExistsException.class, () -> {
+      userService.add(userRequestDto);
+    });
   }
 
 }
