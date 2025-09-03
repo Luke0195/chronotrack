@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements AddUserService {
-
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
 
@@ -31,8 +30,8 @@ public class UserServiceImpl implements AddUserService {
   @Override
   @Transactional
   public UserResponseDto add(UserRequestDto userRequestDto) {
-    Optional<User> user = userRepository.findByEmail(userRequestDto.email());
     Set<Role> roles = new HashSet<>();
+    Optional<User> user = userRepository.findByEmail(userRequestDto.email());
     if(user.isPresent()) throw new ResourceAlreadyExistsException("This e-mail is already exists!");
     if(!userRequestDto.password().equalsIgnoreCase(userRequestDto.passwordConfirmation())) {
       throw new PasswordsDoNotMatchException("The field password_confirmation does not match with the field password");
