@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 
 @ExtendWith(MockitoExtension.class)
 class UserValidatorTest {
@@ -28,6 +30,13 @@ class UserValidatorTest {
     Assertions.assertThrows(ResourceAlreadyExistsException.class, () -> {
       userValidator.validateIfUserExists("any_mail@mail.com");
     });
+  }
+
+  @DisplayName("validateIfUserExists should do nothing when valid email is provided")
+  @Test
+  void validateIfUserExistsShouldDoNothingWhenValidEmailIsProvided(){
+    Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+    userValidator.validateIfUserExists("lucas@mail.com");
   }
 
 }
